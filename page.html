@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>page</title>
+	<link rel="stylesheet" href="css/page.css">
+</head>
+<body>
+	<div class="J_box">
+		<div class="box1"></div>
+		<div class="box2"><img src="images/case.jpg" alt=""></div>
+		<div class="box3"></div>
+	</div>
+	<script src="http://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+	<script type="text/javascript">
+	var config={
+		id:2017, 		// 专题id
+		style:"red", 	//专题风格
+		modules:[{
+			id:11, 			  // 模块id
+			dataType:"case",  // 模块数据类型
+			showType:1, 	  // 模块展现形式
+			length:20 		  // 数量
+		},{
+			id:22,
+			dataType:"case",
+			showType:1,
+			length:20
+		},{
+			id:33,
+			dataType:"case",
+			showType:1,
+			length:20
+		}]
+	}
+	//控制父层iframe高度
+	$(function(){
+		$('#J_PageToDesign,#J_DesignModeShim',window.parent.document).css({
+			height:$('body').height(),
+			width:"100%"
+		})
+	});
+
+	// 监听父层事件
+	window.addEventListener('message',function(e){
+        if(e.source!=window.parent) return;
+        window.parent.postMessage(e.data,'*');
+    },false);
+
+	// 通信
+	window.onload=function(){
+		$('.J_box>div').each(function(i,e){
+			config.modules[i].size={
+				width:$(e).width(),
+				height:$(e).height()
+			}
+		})
+        window.parent.postMessage(config,'*');
+    }
+	</script>
+</body>
+</html>
