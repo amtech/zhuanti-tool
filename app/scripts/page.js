@@ -3,8 +3,7 @@
  * 2017-2-6 
  */
 
-function Special(data) {
-	this.config = data;
+function Special() {
 }
 Special.prototype = {
 	init: function() {
@@ -18,21 +17,24 @@ Special.prototype = {
 		});
 
 		// 监听父层事件
-		window.addEventListener('message', function(e) {
-			if (e.source != window.parent) return;
-			window.parent.postMessage(e.data, '*');
-		}, false);
+		// window.addEventListener('message', function(e) {
+		// 	if (e.source != window.parent) return;
+		// 	window.parent.postMessage(e.data, '*');
+		// }, false);
 
 		// 通信
 		window.onload = function() {
+			var data={};
 			$('#J_Box>div').each(function(i, e) {
-				config.modules[i].size = {
+				data[e.id]={};
+				data[e.id] = {
 					width: $(e).width(),
 					height: $(e).height()
 				}
 			})
-			window.parent.postMessage(config, '*');
+			window.parent.postMessage(data, '*');
 		}
 	}
 }
-
+var special = new Special();
+special.init();

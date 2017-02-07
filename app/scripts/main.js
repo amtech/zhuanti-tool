@@ -15,8 +15,9 @@
  * 2017-2-6 
  */
 document.domain="jiajuol.com";
-function Special() {
-	this.config = null;
+function Special(data) {
+	this.config = data;
+	this.mod_h=null;
 }
 Special.prototype = {
 	init: function() {
@@ -35,8 +36,7 @@ Special.prototype = {
 	listenerMessage: function() {
 		var _self = this;
 		window.addEventListener('message', function(e) {
-			console.log(e)
-			_self.config = e.data;
+			_self.mod_h = e.data;
 			_self.moduleEdit();
 			_self.addModule();
 		}, false);
@@ -48,10 +48,14 @@ Special.prototype = {
 			$box = $('#J_DesignModeShim'),
 			$child = $box.children('div');
 		function getH(d){
-			return d.type=='case'?d.size.height-26:d.size.height;
+			try{
+				return d.type=='case'?_self.mod_h[d.type+"_"+d.id].height-26:_self.mod_h[d.type+"_"+d.id].height;
+			}catch(e){
+				return 0;
+			}
 		}
 		$.each(_self.config.modules, function(i, d) {
-			mod.push('<div class="J_module" data-index="' + i + '" data-id="' + d.id + '" data-name="'+ d.name +'" style="height:' + getH(d) + 'px;margin:0 auto 10px">\
+			mod.push('<div class="J_module" data-index="' + i + '" data-id="' + d.id + '" data-name="'+ d.name +'" data-type="'+ d.type +'" style="height:' + getH(d) + 'px;margin:0 auto 10px">\
 					<div class="btn-group">\
 					  <button type="button" class="btn btn-default mod-up" title="向上"><i class="glyphicon glyphicon-arrow-up"></i></button>\
 					  <button type="button" class="btn btn-default mod-down" title="向下"><i class="glyphicon glyphicon-arrow-down"></i></button>\
@@ -82,7 +86,8 @@ Special.prototype = {
 			}
 		});
 		$box.off('click').on('click', '.mod-edit', function() {
-			$('#myModal').modal('show');
+			var type=$(this).parents('.J_module').data('type')
+			$('#modal-'+type).modal('show');
 			return false;
 		})
 	},
@@ -139,7 +144,4 @@ Special.prototype = {
 			$('.main-wrapper').removeClass('wpst-toolbar-show');
 		});
 	}
-
 }
-var special = new Special();
-special.init();

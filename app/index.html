@@ -232,8 +232,8 @@
   <!-- Add模块拖动用的 -->
 </ul>
 
-<div id="myModal" class="modal fade">
-  <div class="modal-dialog" role="document">
+<div id="modal-text" class="modal">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -242,17 +242,112 @@
         <h4 class="modal-title">自定义编辑区</h4>
       </div>
       <div class="modal-body">
-        <textarea name="" class="form-control" rows="20"></textarea>
+        <textarea name="" class="form-control" rows="15"></textarea>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary">确定</button>
       </div>
     </div>
-    <!-- /.modal-content --> </div>
-  <!-- /.modal-dialog -->
+  </div>
 </div>
-<!-- /.modal -->
+
+<div id="modal-case" class="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">案例模块</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">选择案例：</label>
+            <div class="col-sm-9">
+              <select class="form-control">
+                <option value="">指定ID</option>
+                <option value="">热门案例</option>
+                <option value="">最新案例</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">数量：</label>
+            <div class="col-sm-9">
+              <select class="form-control">
+                <option value="">4</option>
+                <option value="">8</option>
+                <option value="">12</option>
+                <option value="">16</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">案例ID：</label>
+            <div class="col-sm-9">
+              <textarea class="form-control" id="message-text"></textarea>
+              <p class="help-block">多个id用半角逗号分割</p>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modal-slider" class="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">轮播图</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">自动播放：</label>
+            <div class="col-sm-9">
+              <select class="form-control">
+                <option value="">是</option>
+                <option value="">否</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">播放速度：</label>
+            <div class="col-sm-9">
+              <select class="form-control">
+                <option value="">3秒</option>
+                <option value="" selected>4秒</option>
+                <option value="">5秒</option>
+                <option value="">6秒</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">图片URL：</label>
+            <div class="col-sm-9">
+              <textarea class="form-control" id="message-text" placeholder="格式：图片url || 图片连接 || 图片名称"></textarea>
+              <p class="help-block">多条数据回车分割</p>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
@@ -276,8 +371,42 @@
 <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/tab.js"></script>
 <!-- endbuild -->
 
+
 <!-- build:js scripts/main.js -->
 <script src="scripts/main.js"></script>
 <!-- endbuild -->
+<script type="text/javascript">
+  var config = {
+      id: 2017, // 专题id
+      modules: [{
+        id: 11,
+        name:"自定义区",
+        type: "text",
+        data:"自定义区域"
+      }, {
+        id: 22,
+        name:"案例模块",
+        type: "case",
+        length: 20
+      }, {
+        id: 33,
+        name:"图片轮播",
+        type: "slider",
+        set:{
+          width:1200,
+          height:200,
+          auto:4000,
+          speet:500
+        },
+        data:[
+          {img:"http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",url:"http://news.jiajuol.com/201701/73693.shtml",name:"小程序"},
+          {img:"http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",url:"http://seller.jiajuol.com/",name:"装修买建材"},
+          {img:"http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",url:"http://www.jiajuol.com/package",name:"一站式购齐"}
+        ]
+      }]
+    }
+    var special = new Special(config);
+    special.init();
+</script>
 </body>
 </html>
