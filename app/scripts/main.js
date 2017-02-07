@@ -14,7 +14,7 @@
  * 可视化专题配置工具
  * 2017-2-6 
  */
-
+document.domain="jiajuol.com";
 function Special() {
 	this.config = null;
 }
@@ -35,6 +35,7 @@ Special.prototype = {
 	listenerMessage: function() {
 		var _self = this;
 		window.addEventListener('message', function(e) {
+			console.log(e)
 			_self.config = e.data;
 			_self.moduleEdit();
 			_self.addModule();
@@ -46,9 +47,17 @@ Special.prototype = {
 			_self = this,
 			$box = $('#J_DesignModeShim'),
 			$child = $box.children('div');
+		function getH(d){
+			return d.type=='case'?d.size.height-26:d.size.height;
+		}
 		$.each(_self.config.modules, function(i, d) {
-			mod.push('<div class="J_module" data-index="' + i + '" data-id="' + d.id + '" style="height:' + d.size.height + 'px;margin:0 auto 10px">\
-					<a href="" class="edit">编辑</a>\
+			mod.push('<div class="J_module" data-index="' + i + '" data-id="' + d.id + '" data-name="'+ d.name +'" style="height:' + getH(d) + 'px;margin:0 auto 10px">\
+					<div class="btn-group">\
+					  <button type="button" class="btn btn-default mod-up" title="向上"><i class="glyphicon glyphicon-arrow-up"></i></button>\
+					  <button type="button" class="btn btn-default mod-down" title="向下"><i class="glyphicon glyphicon-arrow-down"></i></button>\
+					  <button type="button" class="btn btn-default mod-edit" title="编辑"><i class="glyphicon glyphicon-pencil"></i></button>\
+					  <button type="button" class="btn btn-danger mod-del" title="删除"><i class="glyphicon glyphicon-trash"></i></button>\
+					</div>\
 				</div>')
 		});
 		$child.html(mod.join(''));
@@ -58,8 +67,9 @@ Special.prototype = {
 				left: 40,
 				top: 40
 			},
-			helper: function() {
-				return "<li>aaa</li>"
+			helper: function(e,ui) {
+				console.log(ui)
+				return "<li>"+ui.data('name')+"</li>"
 			},
 			appendTo: ".ui-drag-box",
 			placeholder: "ui-sortable-placeholder",
@@ -71,7 +81,7 @@ Special.prototype = {
 				$('#ui-item').remove();
 			}
 		});
-		$box.off('click').on('click', '.edit', function() {
+		$box.off('click').on('click', '.mod-edit', function() {
 			$('#myModal').modal('show');
 			return false;
 		})

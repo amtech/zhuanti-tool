@@ -1,0 +1,8 @@
+body{min-width: 1200px;}
+#J_Box{overflow:hidden;}
+.mod-case{
+	width: 120%;overflow: hidden;
+	.case_list{margin:0 26px 26px 0;}
+	&~div{margin-top: -26px;}
+}
+
