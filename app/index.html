@@ -30,19 +30,12 @@
               <div>模块</div> <b class="right-small-icon"></b>
             </div>
           </li>
-          <li class="theme  J_ToolbarItem ">
-            <div class="wrap J_TGoldData">
-              <div class="left-line"></div>
-              <b class="item-icon"></b>
-              <div>配色</div>
-              <b class="right-small-icon"></b>
-            </div>
-          </li>
+
           <li class="page-head  J_ToolbarItem ">
             <div class="wrap J_TGoldData">
               <div class="left-line"></div>
               <b class="item-icon"></b>
-              <div>页头</div>
+              <div>头尾</div>
               <b class="right-small-icon"></b>
             </div>
           </li>
@@ -67,20 +60,12 @@
           <li class="modules-slide slide">
             <b class="close-icon J_ToolbarItemClose"></b>
             <div class="inside">
-              <p>
-                选择所需模块，并拖动至相应位置
-                <a href="#" class="help-trigger J_ModuleSizeHelp"></a>
-              </p>
-              <div class="sizes clearfix">
-                <span class="J_SizeSelect size-all size-selected">所有尺寸</span>
-              </div>
               <div class="J_ModulesAccordionBox modules-accordion-box">
                 <div class="modules-wrap modules-wrap-current">
                   <div class="head J_ModuleListHead">
-                    <span>基础模块</span>
-                    <b class="dropdown-icon" data-icon-open="&nbsp;" data-icon-close="&nbsp;"></b>
+                    <span>选择所需模块，并拖动至相应位置</span>
                   </div>
-                  <ul class="module-list clearfix" style="height: 520px;">
+                  <ul class="module-list clearfix">
 
                     <li class="J_NModule" data-modid="4004" data-max-append="40" data-ismove="1" data-isdel="1" data-context="b950-b190-b750-b550">
                       <span class="pic">
@@ -127,63 +112,112 @@
                   </ul>
                 </div>
               </div>
-              <p class="bottom">
-                需要挑选更多模块，请前往
-                <a href="#" target="_blank">服务市场</a>
-              </p>
             </div>
           </li>
-          <li class="theme-slide slide" data-slide="theme">
-            <b class="close-icon J_ToolbarItemClose"></b>
-            <div class="inside">
-              <p>当前模板可以选择的整体配色方案</p>
-              <p class="gray">修改将应用所有页面</p>
-            </div>
-            <div class="color-snips">
-              <ul class="J_ThemesList clearfix"></ul>
-            </div>
-          </li>
+
           <li class="page-head-slide slide" data-slide="page-head">
             <b class="close-icon J_ToolbarItemClose"></b>
-            <div class="J_PageHeadBg page-head-bg-content"></div>
+            <div class="J_PageHeadBg page-head-bg-content">
+              <form>
+                <div class="form-group">
+                  <label>页头：</label>
+                  <select id="J_page_head" class="form-control">
+                    <option value="0">不显示页头</option>
+                    }
+                    <option value="1">默认页头</option>
+                    }
+                    <option value="2">自定义页头</option>
+                    }
+                  </select>
+                  <textarea name="" class="form-control" placeholder="自定义页头HTML" rows="10" style="margin-top: 10px;display: none;"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>页尾：</label>
+                  <select name="" id="J_page_footer" class="form-control">
+                    <option value="0">不显示页尾</option>
+                    }
+                    <option value="1">默认页尾</option>
+                    }
+                    <option value="2">自定义页尾</option>
+                    }
+                  </select>
+                  <textarea name="" class="form-control" placeholder="自定义页尾HTML" rows="10" style="margin-top: 10px;display: none;"></textarea>
+                </div>
+                <div class="help-block">注：自定义页头页尾可配合css一起使用</div>
+                <button class="btn btn-default">提交</button>
+              </form>
+            </div>
           </li>
           <li class="page-slide slide" data-slide="page">
             <b class="close-icon J_ToolbarItemClose"></b>
-            <div class="J_PageBgSettings page-body-bg-content"></div>
+            <div class="J_PageBgSettings page-body-bg-content">
+                <dl>
+                  <dt>页面背景色</dt>
+                  <dd>
+                    <p class="form-control-static">
+                    <input type="color" id="colorsample-pickb" value="#ffffff"></p>
+                    <p class="help-block">若背景色设置不生效可尝试删除背景图</p>
+                  </dd>
+                </dl>
+                <dl>
+                  <dt>页面背景图</dt>
+                  <dd>
+                  <p class="form-control-static">
+                    <input type="file"></p>
+                    <img class="J_PageBgImage" data-bg="//gdp.alicdn.com/bao/uploaded/i4/TB1aGWZPpXXXXcVXpXXSutbFXXX.jpg" src="//gdp.alicdn.com/bao/uploaded/i4/TB1aGWZPpXXXXcVXpXXSutbFXXX.jpg" width="60" height="60">
+                    <button class="btn btn-default">删除</button>
+                    <p class="help-block">文件格式：GIF,JPG,PNG文件大小：1M以内</p>
+                  </dd>
+                </dl>
+                <dl>
+                  <dt>背景显示</dt>
+                  <dd class="bg-show">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td data-bg-show="repeat" class="J_PageShowSelect onselected">平铺</td>
+                          <td data-bg-show="repeat-y" class="J_PageShowSelect ">纵向平铺</td>
+                        </tr>
+                        <tr>
+                          <td data-bg-show="repeat-x" class="J_PageShowSelect ">横向平铺</td>
+                          <td data-bg-show="no-repeat" class="J_PageShowSelect ">不平铺</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </dd>
+                </dl>
+                <dl>
+                  <dt>背景锁定：</dt>
+                  <dd>
+                    <div class="checkbox">
+                      <label><input type="checkbox">锁定</label>
+                    </div>
+                    <p class="help-block">IE10以下浏览器不生效, 请通过预览功能查看锁定效果</p>
+                  </dd>
+                </dl>
+                <dl>
+                  <dt>背景对齐</dt>
+                  <dd class="bg-align">
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td data-bg-align="left 0" class="J_PageAlignSelect">左对齐</td>
+                          <td data-bg-align="center 0" class="J_PageAlignSelect onselected">居中</td>
+                          <td data-bg-align="right 0" class="J_PageAlignSelect ">右对齐</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </dd>
+                </dl>
+                <a href="javascript:void(0);" class="reset J_TGoldData">重置当前页</a>
+            </div>
           </li>
           <li class="css-slide slide" data-slide="css">
             <b class="close-icon J_ToolbarItemClose"></b>
-            <textarea class="J_CSSText csstext" name="csstext"></textarea>
-            <div class="btn">
-              <span class="save">保存</span>
-            </div>
-            <div class="content">
-              <p>
-                新模版非详情页将自动加上 #page
-                <br />
-                #content前缀
-                <br />
-                详情页将自动加上.tb-shop前缀
-              </p>
-              <p>
-                针对宝贝详情页SKU、其他不允许装修 区域的样式代码都将被无提示过滤!
-                <br />
-                同时系统扫描监控会将其识别为违规并 自动处理!
-                <a target="_blank" href="#">查看详细规范</a>
-              </p>
-            </div>
+            <textarea class="J_CSSText csstext form-control" name="csstext" placeholder="自定义CSS"></textarea>
+            <span class="btn btn-default" id="J_CssSave">保存</span>
           </li>
         </ul>
-        <div id="css-disable-mask" class="disable-module" data-module="css-slide">
-          <span class="close-mask-icon J_CloseDisableMask"></span>
-          <a id="order-now" href="#" target="_blank">立即订购</a>
-        </div>
-        <div id="page-disable-mask" class="disable-module" data-module="page-slide">
-          <span class="close-mask-icon J_CloseDisableMask"></span>
-        </div>
-        <div id="css-upgrade-mask" class="disable-module" data-module="css-slide">
-          <span class="close-mask-icon J_CloseDisableMask"></span>
-        </div>
       </div>
       <div class="vl-main">
         <div class="design-navigation-wrap">
@@ -228,126 +262,143 @@
     </div>
   </div>
 </div>
-<ul class="ui-drag-box">
-  <!-- Add模块拖动用的 -->
-</ul>
 
-<div id="modal-text" class="modal">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title">自定义编辑区</h4>
-      </div>
-      <div class="modal-body">
-        <textarea name="" class="form-control" rows="15"></textarea>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary">确定</button>
+<!-- Add模块拖动用的 -->
+<ul class="ui-drag-box"></ul>
+
+<!-- 自定义区编辑层 -->
+<script type="text/html" id="modal-text">
+  <div id="modal" class="modal">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">自定义编辑区</h4>
+        </div>
+        <div class="modal-body">
+          <textarea class="form-control J_text" rows="15"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary J_ok">确定</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</script>
 
-<div id="modal-case" class="modal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title">案例模块</h4>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal">
-          <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">选择案例：</label>
-            <div class="col-sm-9">
-              <select class="form-control">
-                <option value="">指定ID</option>
-                <option value="">热门案例</option>
-                <option value="">最新案例</option>
-              </select>
+<!-- 案例编辑层 -->
+<script type="text/html" id="modal-case">
+  <div class="modal" id="modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">案例模块</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">选择案例：</label>
+              <div class="col-sm-9">
+                <select class="form-control">
+                  <option value="">指定ID</option>
+                  <option value="">热门案例</option>
+                  <option value="">最新案例</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">数量：</label>
-            <div class="col-sm-9">
-              <select class="form-control">
-                <option value="">4</option>
-                <option value="">8</option>
-                <option value="">12</option>
-                <option value="">16</option>
-              </select>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">数量：</label>
+              <div class="col-sm-9">
+                <select class="form-control">
+                  <option value="">4</option>
+                  <option value="">8</option>
+                  <option value="">12</option>
+                  <option value="">16</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">案例ID：</label>
-            <div class="col-sm-9">
-              <textarea class="form-control" id="message-text"></textarea>
-              <p class="help-block">多个id用半角逗号分割</p>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">案例ID：</label>
+              <div class="col-sm-9">
+                <textarea class="form-control" id="message-text"></textarea>
+                <p class="help-block">多个id用半角逗号分割</p>
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary">确定</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary">确定</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</script>
 
-<div id="modal-slider" class="modal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title">轮播图</h4>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal">
-          <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">自动播放：</label>
-            <div class="col-sm-9">
-              <select class="form-control">
-                <option value="">是</option>
-                <option value="">否</option>
-              </select>
+<!-- 图片编辑层 -->
+<script type="text/html" id="modal-slider">
+  <div id="modal" class="modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">轮播图</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label class="col-sm-2 control-label">模块高度：</label>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="请设置300~400之间" value="200" aria-describedby="basic-addon2">
+                  <span class="input-group-addon" id="basic-addon2">px</span>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">播放速度：</label>
-            <div class="col-sm-9">
-              <select class="form-control">
-                <option value="">3秒</option>
-                <option value="" selected>4秒</option>
-                <option value="">5秒</option>
-                <option value="">6秒</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="inputEmail3" class="col-sm-2 control-label">图片URL：</label>
-            <div class="col-sm-9">
-              <textarea class="form-control" id="message-text" placeholder="格式：图片url || 图片连接 || 图片名称"></textarea>
-              <p class="help-block">多条数据回车分割</p>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary">确定</button>
+          </form>
+          <table class="table table-bordered table-condensed">
+            <tr>
+              <th>图片地址</th>
+              <th>链接地址</th>
+              <th width="115">操作</th>
+            </tr>
+            <tr>
+              <td>
+                <div class="input-group">
+                  <input type="text" class="form-control input-sm" placeholder="图片地址">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btn-sm" type="button" title="上传图片"><i class="glyphicon glyphicon-upload"></i></button>
+                  </span>
+                </div>
+              </td>
+              <td><input type="text" class="form-control input-sm" placeholder="图片链接"></td>
+              <td align="center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm" title="向上"><i class="glyphicon glyphicon-arrow-up"></i></button>
+                  <button type="button" class="btn btn-default btn-sm" title="向下"><i class="glyphicon glyphicon-arrow-down"></i></button>
+                  <button type="button" class="btn btn-default btn-sm" title="删除"><i class="glyphicon glyphicon-remove"></i></button>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <div class="text-center"><button type="button" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"></i>添加</button></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary">确定</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</script>
 
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
@@ -370,7 +421,6 @@
 <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/collapse.js"></script>
 <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/tab.js"></script>
 <!-- endbuild -->
-
 
 <!-- build:js scripts/main.js -->
 <script src="scripts/main.js"></script>

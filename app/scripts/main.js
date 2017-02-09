@@ -18,6 +18,7 @@ document.domain="jiajuol.com";
 function Special(data) {
 	this.config = data;
 	this.mod_h=null;
+	this.page=window.frames[0];
 }
 Special.prototype = {
 	init: function() {
@@ -55,7 +56,7 @@ Special.prototype = {
 			}
 		}
 		$.each(_self.config.modules, function(i, d) {
-			mod.push('<div class="J_module" data-index="' + i + '" data-id="' + d.id + '" data-name="'+ d.name +'" data-type="'+ d.type +'" style="height:' + getH(d) + 'px;margin:0 auto 10px">\
+			mod.push('<div class="J_module" id="'+d.type+'_'+d.id+'" data-index="' + i + '" data-id="' + d.id + '" data-name="'+ d.name +'" data-type="'+ d.type +'" style="height:' + getH(d) + 'px;margin:0 auto 10px">\
 					<div class="btn-group">\
 					  <button type="button" class="btn btn-default mod-up" title="向上"><i class="glyphicon glyphicon-arrow-up"></i></button>\
 					  <button type="button" class="btn btn-default mod-down" title="向下"><i class="glyphicon glyphicon-arrow-down"></i></button>\
@@ -72,7 +73,7 @@ Special.prototype = {
 				top: 40
 			},
 			helper: function(e,ui) {
-				console.log(ui)
+				// console.log(ui)
 				return "<li>"+ui.data('name')+"</li>"
 			},
 			appendTo: ".ui-drag-box",
@@ -86,10 +87,31 @@ Special.prototype = {
 			}
 		});
 		$box.off('click').on('click', '.mod-edit', function() {
-			var type=$(this).parents('.J_module').data('type')
-			$('#modal-'+type).modal('show');
+			var $this=$(this).parents('.J_module'),type=$this.data('type');
+			$('body').append($('#modal-'+type).html());
+
+			switch(type){
+				case "text":
+					$("#modal").find('.J_ok').click(function(){
+						// alert($('.J_text').val())
+						window.frames[0].postMessage({
+				       	   type:"text",
+				       	   id:$this.data('id'),
+				       	   data:$('.J_text').val()
+				       	},'/');
+					});
+				break;
+			}
+
+
+
+
+
+			$('#modal').modal('show').on('hide.bs.modal',function(){
+				$(this).remove();
+			});
 			return false;
-		})
+		});
 	},
 	// 添加模块
 	addModule: function() {
@@ -122,10 +144,10 @@ Special.prototype = {
 				$("#J_DesignModeShim .J_module").droppable("destroy");
 			}
 		});
-
-
 	},
 	leftMenu: function() {
+		var _self=this;
+		// 层
 		$('.J_ToolBar').on('click', 'li', function() {
 			var $this = $(this);
 			$this.siblings('li').removeClass('selected');
@@ -143,5 +165,46 @@ Special.prototype = {
 			$('.J_ToolBar>li,.J_ModuleSlides>li').removeClass('selected');
 			$('.main-wrapper').removeClass('wpst-toolbar-show');
 		});
+
+		//头尾
+		$('#J_page_head,#J_page_footer').change(function(){
+			if($(this).val()==2){
+				$(this).next('textarea').show();
+			}else{
+				$(this).next('textarea').hide();
+			}
+		});
+
+		// 页面
+		function bg(){
+		   $(this).parents("table").find(".onselected").removeClass("onselected").end().end().addClass("onselected");
+	       _self.page.postMessage({
+	       	   type:"bg",
+	       	   img:$(".J_PageBgImage").data('bg'),
+	       	   color:$("#colorsample-pickb").val(),
+	       	   show:$(".J_PageShowSelect.onselected").data('bg-show'),
+	       	   fixed:false,
+	       	   align:$(".J_PageAlignSelect.onselected").data('bg-align')
+	       },'/');
+		}
+
+		// css
+		function css(){
+			window.frames[0].postMessage({
+	       	   type:"css",
+	       	   data:$('.J_CSSText').val()
+	       	},'/');
+		}
+
+
+
+
+
+
+
+		window.onload=function(){
+			$(".J_PageShowSelect,.J_PageAlignSelect").click(bg);// bg();
+			$('#J_CssSave').click(css);
+		}
 	}
 }
