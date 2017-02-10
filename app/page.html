@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>page</title>
 	<link rel="stylesheet" type="text/css" href="//s.jiajuol.com/jiajuol/pc/0200/css/public.min.css">
+	<link rel="stylesheet" href="http://s.jiajuol.com/jiajuol/pc/0200/lib/swiper2/idangerous.swiper.css">
 	<link rel="stylesheet" href="styles/page.css"></head>
 <body>
 	<div class="box-body">
@@ -327,33 +328,30 @@
 					</div>
 				</div>
 			</div>
-			<div id="slider_33" class="mb10">
-				<div class="slider" id="slider">
-					<a target="_blank" href="http://news.jiajuol.com/201701/73693.shtml" class="lazy slider-panel">
-						<img data-original="http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c" src="http://icon.carimg.com/haopinjia/blank.gif" width="1920" height="480" alt="小程序" title="小程序"></a>
-					<a target="_blank" href="http://seller.jiajuol.com/" class="lazy slider-panel">
-						<img data-original="http://i.carimg.com/store/668/067/000/105898435c12e85.jpg!c" src="http://icon.carimg.com/haopinjia/blank.gif" width="1920" height="480" alt="装修买建材" title="装修买建材"></a>
-					<a target="_blank" href="http://www.jiajuol.com/package" class="lazy slider-panel">
-						<img data-original="http://i.carimg.com/store/669/067/000/83558984381cf03b.jpg!c" src="http://icon.carimg.com/haopinjia/blank.gif" width="1920" height="480" alt="一站式购齐" title="一站式购齐"></a>
+			<div id="slider_33" class="swiper-container mb10 pr" style="height: 300px;">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide">
+						<a target="_blank" href="http://news.jiajuol.com/201701/73693.shtml" class="lazy slider-panel">
+							<img src="http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c" width="1200"></a>
+					</div>
+					<div class="swiper-slide">
+						<a target="_blank" href="http://seller.jiajuol.com/" class="lazy slider-panel">
+							<img src="http://i.carimg.com/store/668/067/000/105898435c12e85.jpg!c" width="1200"></a>
+					</div>
+					<div class="swiper-slide">
+						<a target="_blank" href="http://www.jiajuol.com/package" class="lazy slider-panel">
+							<img src="http://i.carimg.com/store/669/067/000/83558984381cf03b.jpg!c" width="1200"></a>
+					</div>
 				</div>
+				<div class="pagination"></div>
 			</div>
 		</div>
 	</div>
-	<!-- build:js scripts/vendor.js -->
-	<!-- bower:js -->
-	<script src="/bower_components/jquery/dist/jquery.js"></script>
-	<script src="/bower_components/jquery-ui/jquery-ui.js"></script>
-	<!-- endbower -->
-	<!-- endbuild -->
 
-	<script src="http://s.jiajuol.com/jiajuol/pc/0200/js/public.js" type="text/javascript" charset="utf-8"></script>
+
+	<script src="http://s.jiajuol.com/common/jquery-1.9.1.min.js"></script>
+	<script src="http://s.jiajuol.com/jiajuol/pc/0200/lib/swiper2/idangerous.swiper.min.js"></script>
+	<script src="http://s.jiajuol.com/jiajuol/pc/0200/js/public.js"></script>
 	<script type="text/javascript" src="scripts/page.js"></script>
-	<script type="text/javascript">
-		jiajuol.slide({
-			id:'#slider',
-			speet:500,
-			auto:4000
-		});
-	</script>
 </body>
 </html>

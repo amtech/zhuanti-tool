@@ -14,6 +14,7 @@
  * 可视化专题配置工具
  * 2017-2-6 
  */
+
 document.domain = "jiajuol.com";
 
 function Special(data) {
@@ -52,6 +53,16 @@ Special.prototype = {
 			document.getElementById(key).style.height = val + "px";
 		})
 	},
+	// 模块排序
+	modSort: function() {
+		var sort = [],
+			_self = this;
+		$('#J_DesignModeShim .J_module').each(function(i, d) {
+			sort.push(d.id);
+		});
+		_self.config.module.sort = sort;
+		console.log("排序:", sort);
+	},
 	// 模块编辑
 	moduleEdit: function() {
 		var mod = [],
@@ -61,8 +72,8 @@ Special.prototype = {
 			scroll = null,
 			$jpage = $('#J_Page');
 
-		$.each(_self.config.modules, function(i, d) {
-			mod.push('<div class="J_module" id="' + d.type + '_' + d.id + '" data-id="' + d.id + '" data-name="' + d.name + '" data-type="' + d.type + '">\
+		$.each(_self.config.module.sort, function(i, d) {
+			mod.push('<div class="J_module" id="' + d + '" data-id="' + _self.config.module[d].id + '" data-name="' + _self.config.module[d].name + '" data-type="' + _self.config.module[d].type + '">\
 					<div class="btn-group">\
 					  <button type="button" class="btn btn-default" data-type="up" title="向上"><i class="glyphicon glyphicon-arrow-up"></i></button>\
 					  <button type="button" class="btn btn-default" data-type="down" title="向下"><i class="glyphicon glyphicon-arrow-down"></i></button>\
@@ -104,6 +115,7 @@ Special.prototype = {
 						modType: ui.item.data('type'),
 						id: ui.item.data('id')
 					}, '/');
+					_self.modSort();
 				} else if (ui.item.index() < dragIndex) {
 					// alert('上')
 					_self.page.postMessage({
@@ -113,6 +125,7 @@ Special.prototype = {
 						modType: ui.item.data('type'),
 						id: ui.item.data('id')
 					}, '/');
+					_self.modSort();
 				}
 			},
 			sort: function(e, ui) { //控制排序自动滚动视图
@@ -154,6 +167,7 @@ Special.prototype = {
 							id: $mod.data('id')
 						}, '/');
 						$mod.prev('.J_module').before($mod);
+						_self.modSort();
 					}
 					break;
 				case "down":
@@ -166,6 +180,7 @@ Special.prototype = {
 							id: $mod.data('id')
 						}, '/');
 						$mod.next('.J_module').after($mod);
+						_self.modSort();
 					}
 					break;
 				case "edit":
@@ -181,20 +196,21 @@ Special.prototype = {
 								}, '/');
 								$modal.modal('hide');
 							});
-						break;
+							break;
 						case "slider":
-							var htm=[],$slideTable=$('.J_SlideTable');
-							$.each(_self.config.modules[$mod.index()].data,function(i,d){
+							var htm = [],
+								$slideTable = $('.J_SlideTable');
+							$.each(_self.config.module[$mod.attr('id')].data, function(i, d) {
 								htm.push('<tr>\
 									<td>\
 						                <div class="input-group">\
-						                  <input type="text" class="form-control input-sm" placeholder="图片地址" value="'+d.img+'">\
+						                  <input type="text" class="form-control input-sm" name="img" placeholder="图片地址" value="' + d.img + '">\
 						                  <span class="input-group-btn">\
 						                    <button class="btn btn-default btn-sm" type="button" title="上传图片"><i class="glyphicon glyphicon-upload"></i></button>\
 						                  </span>\
 						                </div>\
 						              </td>\
-						              <td><input type="text" class="form-control input-sm" placeholder="图片链接" value="'+d.url+'"></td>\
+						              <td><input type="text" class="form-control input-sm" name="url" placeholder="图片链接" value="' + d.url + '"></td>\
 						              <td align="center">\
 						                <div class="btn-group">\
 						                  <button type="button" class="btn btn-default btn-sm J_ImgUp" title="向上"><i class="glyphicon glyphicon-arrow-up"></i></button>\
@@ -205,40 +221,45 @@ Special.prototype = {
 									</tr>')
 							});
 							$slideTable.append(htm.join(''));
-
-							$slideTable.on('click','.J_ImgUp',function(){
-								var $this=$(this),$tr=$this.parents('tr'),index=$tr.index();
-								if(index>1){
-									$slideTable.find('tr').eq(index-1).before($tr);
+							// 向上
+							$slideTable.on('click', '.J_ImgUp', function() {
+								var $this = $(this),
+									$tr = $this.parents('tr'),
+									index = $tr.index();
+								if (index > 1) {
+									$slideTable.find('tr').eq(index - 1).before($tr);
 								}
 							});
-							$slideTable.on('click','.J_ImgDown',function(){
-								var $this=$(this),$tr=$this.parents('tr'),index=$tr.index();
-								if(index<$tr.siblings('tr').length){
-									$slideTable.find('tr').eq(index+1).after($tr);
+							// 向下
+							$slideTable.on('click', '.J_ImgDown', function() {
+								var $this = $(this),
+									$tr = $this.parents('tr'),
+									index = $tr.index();
+								if (index < $tr.siblings('tr').length) {
+									$slideTable.find('tr').eq(index + 1).after($tr);
 								}
 							});
-							$slideTable.on('click','.J_ImgDel',function(){
-								var par=$(this).parents('tr');
-								if($slideTable.find('tr').length==2){
+							//删除
+							$slideTable.on('click', '.J_ImgDel', function() {
+								var par = $(this).parents('tr');
+								if ($slideTable.find('tr').length == 2) {
 									alert('请至少保留一条数据')
-								}else{
+								} else {
 									par.remove();
 								}
 							});
-
 							//添加图片
-							$('.J_SlideAdd').click(function(){
+							$('.J_SlideAdd').click(function() {
 								$slideTable.append('<tr>\
 									<td>\
 						                <div class="input-group">\
-						                  <input type="text" class="form-control input-sm" placeholder="图片地址">\
+						                  <input type="text" class="form-control input-sm" name="img" placeholder="图片地址">\
 						                  <span class="input-group-btn">\
 						                    <button class="btn btn-default btn-sm" type="button" title="上传图片"><i class="glyphicon glyphicon-upload"></i></button>\
 						                  </span>\
 						                </div>\
 						              </td>\
-						              <td><input type="text" class="form-control input-sm" placeholder="图片链接"></td>\
+						              <td><input type="text" class="form-control input-sm" name="url" placeholder="图片链接"></td>\
 						              <td align="center">\
 						                <div class="btn-group">\
 						                  <button type="button" class="btn btn-default btn-sm J_ImgUp" title="向上"><i class="glyphicon glyphicon-arrow-up"></i></button>\
@@ -247,8 +268,29 @@ Special.prototype = {
 						                </div>\
 						              </td>\
 									</tr>')
-							})
-						break;
+							});
+							// 保存
+							$modal.find('.J_ok').click(function() {
+								var id = $mod.attr('id'),
+									h = $modal.find('.J_Height').val(),
+									data = [];
+								$slideTable.find('tr').each(function(i, d) {
+									if (i == 0) return;
+									data.push({
+										img: $(d).find('[name=img]').val(),
+										url: $(d).find('[name=url]').val()
+									});
+								});
+								_self.config.module[id].height = h;
+								_self.config.module[id].data = data;
+								_self.page.postMessage({
+									type: "slider",
+									id: $mod.data('id'),
+									height: h,
+									data: _self.config.module[id]
+								}, '/');
+							});
+							break;
 					}
 					$modal.modal('show').on('hide.bs.modal', function() {
 						$(this).remove();
@@ -283,7 +325,7 @@ Special.prototype = {
 						console.log(ui.draggable.data('modid'))
 						$('.ui-sortable-placeholder').remove();
 					},
-					over: function(e,ui) {
+					over: function(e, ui) {
 						$('.ui-sortable-placeholder').remove();
 						if (dey) clearTimeout(dey);
 						dey = setTimeout(function() {
@@ -361,43 +403,42 @@ Special.prototype = {
 
 /*
 	待解决
-	1、轮播图模块功能
-	2、案例模块
-	3、解决添加模块拖拽精确位置
+	1、案例模块
+	2、解决添加模块拖拽精确位置---够呛
 */
 
 /*
 	20170209
 	1、自定义区编辑
 	2、删除功能
-	3、拖动排序、上下排序------ing
+	3、拖动排序、上下排序
 	4、解决模块拖动 动态滚动窗口
+	5、轮播图模块完整功能
 */
 
 
 
-
- // $(e).imgUpload({
- //        url:'/admin/api/upload/upload.php',
- //        data:{
- //            action:'ad'
- //        },
- //        before:function(e){
- //            e.text('上传中...');
- //        },
- //        success:function(e,data){//当前对象，返回的完整数据
- //            if (data.info.code == 100) {
- //                e.text('选择文件');
- //                var n=e.data('index'),_url=data.server+data.id;
- //                $("#cover"+n).val(_url);
- //                $('.coverPic'+n).attr({src:_url});
- //            }else {
- //                alert(data.info.message);
- //                e.text('选择文件');
- //            }
- //        },
- //        error:function(e){//当前对象
- //            alert('接口异常！');
- //            e.text('选择文件');
- //        }
- //    });
+// $(e).imgUpload({
+//        url:'/admin/api/upload/upload.php',
+//        data:{
+//            action:'ad'
+//        },
+//        before:function(e){
+//            e.text('上传中...');
+//        },
+//        success:function(e,data){//当前对象，返回的完整数据
+//            if (data.info.code == 100) {
+//                e.text('选择文件');
+//                var n=e.data('index'),_url=data.server+data.id;
+//                $("#cover"+n).val(_url);
+//                $('.coverPic'+n).attr({src:_url});
+//            }else {
+//                alert(data.info.message);
+//                e.text('选择文件');
+//            }
+//        },
+//        error:function(e){//当前对象
+//            alert('接口异常！');
+//            e.text('选择文件');
+//        }
+//    });

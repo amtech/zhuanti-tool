@@ -6,8 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>zhuanti</title>
 
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <!-- Place favicon.ico in the root directory -->
 
   <!-- build:css styles/vendor.css -->
   <!-- bower:css -->
@@ -358,7 +356,7 @@
               <label class="col-sm-2 control-label">模块高度：</label>
               <div class="col-sm-9">
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="请设置300~400之间" value="200" aria-describedby="basic-addon2">
+                  <input type="text" class="form-control J_Height" placeholder="" value="200">
                   <span class="input-group-addon" id="basic-addon2">px</span>
                 </div>
               </div>
@@ -375,7 +373,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-primary">确定</button>
+          <button type="button" class="btn btn-primary J_ok">确定</button>
         </div>
       </div>
     </div>
@@ -409,43 +407,25 @@
 <!-- endbuild -->
 <script src="//s.jiajuol.com/admin/jiajuol/0100/jquery.picupload.js"></script> 
 <script type="text/javascript">
-  // var config = {
-  //     id: 2017, // 专题id
-  //     modules: [{
-  //       id: 11,
-  //       name:"自定义区",
-  //       type: "text",
-  //       data:"自定义区域"
-  //     }, {
-  //       id: 22,
-  //       name:"案例模块",
-  //       type: "case",
-  //       length: 20
-  //     }, {
-  //       id: 33,
-  //       name:"图片轮播",
-  //       type: "slider",
-  //       height:500,
-  //       data:[
-  //         {img:"http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",url:"http://news.jiajuol.com/201701/73693.shtml"},
-  //         {img:"http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",url:"http://seller.jiajuol.com/"},
-  //         {img:"http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",url:"http://www.jiajuol.com/package"}
-  //       ]
-  //     }]
-  //   }
   var config = {
     id: 2017, // 专题id
-    modules: {
+    module: {
       sort:["text_11","case_22","slider_33"],
       text_11: {
+        id:11,
+        type:"text",
         name: "自定义区",
         data: "自定义区域"
       },
       case_22: {
+        id:22,
+        type:"case",
         name: "案例模块",
         length: 20
       },
       slider_33: {
+        id:33,
+        type:"slider",
         name: "图片轮播",
         height: 500,
         data: [{
