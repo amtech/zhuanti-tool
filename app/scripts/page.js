@@ -8,11 +8,21 @@ function Special() {
 Special.prototype = {
 	init: function() {
 		var _self = this;
-
-		// 监听父层事件
+		_self.listenerMessage();
+		// 通信
+		window.onload = function() {
+			$('#J_PageToDesign,#J_DesignModeShim', window.parent.document).css({
+				height: $('body').height(),
+				width: "100%"
+			});
+			_self.postMessageModHeight();
+		}
+	},
+	// 监听父层事件
+	listenerMessage:function(){
+		var _self = this;
 		window.addEventListener('message', function(e) {
 			if (e.source != window.parent) return;
-			// window.parent.postMessage(e.data, '*');
 			switch(e.data.type){
 				case "bg":
 					_self.bg(e);
@@ -23,30 +33,25 @@ Special.prototype = {
 				case "text":
 					_self.text(e);
 				break;
-
+				case "del":
+					_self.del(e);
+				break;
+				case "move":
+					_self.move(e);
+				break;
 			}
 		}, false);
-
-		// 通信
-		window.onload = function() {
-			var data={};
-			$('#content>div').each(function(i, e) {
-				data[e.id]={};
-				data[e.id] = {
-					width: $(e).width(),
-					height: $(e).height()
-				}
-			})
-			window.parent.postMessage(data, '*');
-		}
-
-		//控制父层iframe高度
-		$(function() {
-			$('#J_PageToDesign,#J_DesignModeShim', window.parent.document).css({
-				height: $('body').height(),
-				width: "100%"
-			})
-		});
+	},
+	//通知父层模块遮罩层高度及顺序
+	postMessageModHeight:function(){
+		var data={
+			type:"set_mod_height",
+			height:{}
+		};
+		$('#content>div').each(function(i, e) {
+			data.height[e.id]=$(e).height();
+		})
+		window.parent.postMessage(data, '*');
 	},
 	bg:function(e){
 		$('.box-body').css({
@@ -65,6 +70,21 @@ Special.prototype = {
 	},
 	text:function(e){
 		$("#"+e.data.type+"_"+e.data.id).html(e.data.data);
+		this.postMessageModHeight();
+	},
+	del:function(e){
+		$('#'+e.data.modType+"_"+e.data.id).remove();
+	},
+	move:function(e){
+		var mod=$('#'+e.data.modType+'_'+e.data.id);
+		switch(e.data.direction){
+			case "up":
+				$('#content>div').eq(e.data.curIndex).before(mod);
+			break;
+			case "down":
+				$('#content>div').eq(e.data.curIndex).after(mod);
+			break;
+		};
 	}
 }
 var special = new Special();

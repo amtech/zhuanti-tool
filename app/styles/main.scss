@@ -6,11 +6,11 @@ $icon-font-path: '../fonts/';
 @import "bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 // endbower
 
-
+html{overflow: hidden;}
 .vl-design-mode-shim .mod_box{width:1200px;margin:0 auto;position:relative}
 
 /*模块编辑层*/
-.J_module{text-align: center; opacity:0}
+.J_module{text-align: center; opacity:0;margin:0 auto 10px}
 .J_module:hover{background:rgba(120,170,200,0.5);opacity:1;border:solid 1px #4aa3cc;box-sizing: border-box;}
 .J_droppable{width: 100%;height: 100%;}
 

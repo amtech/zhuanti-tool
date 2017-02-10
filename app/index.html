@@ -364,32 +364,14 @@
               </div>
             </div>
           </form>
-          <table class="table table-bordered table-condensed">
+          <table class="table table-bordered table-condensed J_SlideTable">
             <tr>
               <th>图片地址</th>
               <th>链接地址</th>
               <th width="115">操作</th>
             </tr>
-            <tr>
-              <td>
-                <div class="input-group">
-                  <input type="text" class="form-control input-sm" placeholder="图片地址">
-                  <span class="input-group-btn">
-                    <button class="btn btn-default btn-sm" type="button" title="上传图片"><i class="glyphicon glyphicon-upload"></i></button>
-                  </span>
-                </div>
-              </td>
-              <td><input type="text" class="form-control input-sm" placeholder="图片链接"></td>
-              <td align="center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-default btn-sm" title="向上"><i class="glyphicon glyphicon-arrow-up"></i></button>
-                  <button type="button" class="btn btn-default btn-sm" title="向下"><i class="glyphicon glyphicon-arrow-down"></i></button>
-                  <button type="button" class="btn btn-default btn-sm" title="删除"><i class="glyphicon glyphicon-remove"></i></button>
-                </div>
-              </td>
-            </tr>
           </table>
-          <div class="text-center"><button type="button" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-plus"></i>添加</button></div>
+          <div class="text-center"><button type="button" class="btn btn-default btn-sm J_SlideAdd"><i class="glyphicon glyphicon-plus"></i>添加</button></div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -425,38 +407,62 @@
 <!-- build:js scripts/main.js -->
 <script src="scripts/main.js"></script>
 <!-- endbuild -->
+<script src="//s.jiajuol.com/admin/jiajuol/0100/jquery.picupload.js"></script> 
 <script type="text/javascript">
+  // var config = {
+  //     id: 2017, // 专题id
+  //     modules: [{
+  //       id: 11,
+  //       name:"自定义区",
+  //       type: "text",
+  //       data:"自定义区域"
+  //     }, {
+  //       id: 22,
+  //       name:"案例模块",
+  //       type: "case",
+  //       length: 20
+  //     }, {
+  //       id: 33,
+  //       name:"图片轮播",
+  //       type: "slider",
+  //       height:500,
+  //       data:[
+  //         {img:"http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",url:"http://news.jiajuol.com/201701/73693.shtml"},
+  //         {img:"http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",url:"http://seller.jiajuol.com/"},
+  //         {img:"http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",url:"http://www.jiajuol.com/package"}
+  //       ]
+  //     }]
+  //   }
   var config = {
-      id: 2017, // 专题id
-      modules: [{
-        id: 11,
-        name:"自定义区",
-        type: "text",
-        data:"自定义区域"
-      }, {
-        id: 22,
-        name:"案例模块",
-        type: "case",
+    id: 2017, // 专题id
+    modules: {
+      sort:["text_11","case_22","slider_33"],
+      text_11: {
+        name: "自定义区",
+        data: "自定义区域"
+      },
+      case_22: {
+        name: "案例模块",
         length: 20
-      }, {
-        id: 33,
-        name:"图片轮播",
-        type: "slider",
-        set:{
-          width:1200,
-          height:200,
-          auto:4000,
-          speet:500
-        },
-        data:[
-          {img:"http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",url:"http://news.jiajuol.com/201701/73693.shtml",name:"小程序"},
-          {img:"http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",url:"http://seller.jiajuol.com/",name:"装修买建材"},
-          {img:"http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",url:"http://www.jiajuol.com/package",name:"一站式购齐"}
-        ]
-      }]
+      },
+      slider_33: {
+        name: "图片轮播",
+        height: 500,
+        data: [{
+          img: "http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",
+          url: "http://news.jiajuol.com/201701/73693.shtml"
+        }, {
+          img: "http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",
+          url: "http://seller.jiajuol.com/"
+        }, {
+          img: "http://i.carimg.com/store/666/067/000/6365898432d2f31b.jpg!c",
+          url: "http://www.jiajuol.com/package"
+        }]
+      }
     }
-    var special = new Special(config);
-    special.init();
+  }
+  var special = new Special(config);
+  special.init();
 </script>
 </body>
 </html>

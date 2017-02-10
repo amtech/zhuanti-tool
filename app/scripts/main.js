@@ -8,17 +8,17 @@
 问题:
 1、左侧拖动与右侧排序冲突，解决办法：左侧拖动的时候执行右侧放置方法，拖动结束后销毁放置方法
 
-===========*/ 
+===========*/
 
 /* 
  * 可视化专题配置工具
  * 2017-2-6 
  */
-document.domain="jiajuol.com";
+document.domain = "jiajuol.com";
+
 function Special(data) {
 	this.config = data;
-	this.mod_h=null;
-	this.page=window.frames[0];
+	this.page = window.frames[0];
 }
 Special.prototype = {
 	init: function() {
@@ -31,86 +31,242 @@ Special.prototype = {
 		});
 
 		_self.listenerMessage();
+		_self.moduleEdit();
 		_self.leftMenu();
+		_self.addModule();
 	},
 	// 监听子页面
 	listenerMessage: function() {
 		var _self = this;
 		window.addEventListener('message', function(e) {
-			_self.mod_h = e.data;
-			_self.moduleEdit();
-			_self.addModule();
+			switch (e.data.type) {
+				case "set_mod_height":
+					_self.setModHeight(e.data.height);
+					break;
+			}
 		}, false);
+	},
+	// 设置模块遮罩层高度
+	setModHeight: function(d) {
+		$.each(d, function(key, val) {
+			document.getElementById(key).style.height = val + "px";
+		})
 	},
 	// 模块编辑
 	moduleEdit: function() {
 		var mod = [],
 			_self = this,
 			$box = $('#J_DesignModeShim'),
-			$child = $box.children('div');
-		function getH(d){
-			try{
-				return d.type=='case'?_self.mod_h[d.type+"_"+d.id].height-26:_self.mod_h[d.type+"_"+d.id].height;
-			}catch(e){
-				return 0;
-			}
-		}
+			$child = $box.children('div'),
+			scroll = null,
+			$jpage = $('#J_Page');
+
 		$.each(_self.config.modules, function(i, d) {
-			mod.push('<div class="J_module" id="'+d.type+'_'+d.id+'" data-index="' + i + '" data-id="' + d.id + '" data-name="'+ d.name +'" data-type="'+ d.type +'" style="height:' + getH(d) + 'px;margin:0 auto 10px">\
+			mod.push('<div class="J_module" id="' + d.type + '_' + d.id + '" data-id="' + d.id + '" data-name="' + d.name + '" data-type="' + d.type + '">\
 					<div class="btn-group">\
-					  <button type="button" class="btn btn-default mod-up" title="向上"><i class="glyphicon glyphicon-arrow-up"></i></button>\
-					  <button type="button" class="btn btn-default mod-down" title="向下"><i class="glyphicon glyphicon-arrow-down"></i></button>\
-					  <button type="button" class="btn btn-default mod-edit" title="编辑"><i class="glyphicon glyphicon-pencil"></i></button>\
-					  <button type="button" class="btn btn-danger mod-del" title="删除"><i class="glyphicon glyphicon-trash"></i></button>\
+					  <button type="button" class="btn btn-default" data-type="up" title="向上"><i class="glyphicon glyphicon-arrow-up"></i></button>\
+					  <button type="button" class="btn btn-default" data-type="down" title="向下"><i class="glyphicon glyphicon-arrow-down"></i></button>\
+					  <button type="button" class="btn btn-default" data-type="edit" title="编辑"><i class="glyphicon glyphicon-pencil"></i></button>\
+					  <button type="button" class="btn btn-danger" data-type="del" title="删除"><i class="glyphicon glyphicon-trash"></i></button>\
 					</div>\
 				</div>')
 		});
 		$child.html(mod.join(''));
 		// $('#J_DesignModeShim').sortable( "destroy" );
+		var dragIndex;
 		$child.sortable({
 			cursorAt: {
 				left: 40,
 				top: 40
 			},
-			helper: function(e,ui) {
+			helper: function(e, ui) {
 				// console.log(ui)
-				return "<li>"+ui.data('name')+"</li>"
+				return "<li>" + ui.data('name') + "</li>"
 			},
 			appendTo: ".ui-drag-box",
 			placeholder: "ui-sortable-placeholder",
 			start: function(e, ui) {
-				console.log(ui)
+				dragIndex = ui.item.index();
 				ui.item.before('<div id="ui-item" style="height:' + ui.item.height() + 'px;margin-bottom:10px"></div>');
 			},
 			stop: function(e, ui) {
 				$('#ui-item').remove();
+				if (scroll) {
+					clearInterval(scroll);
+					scroll = null;
+				}
+				if (ui.item.index() > dragIndex) {
+					// alert('下')
+					_self.page.postMessage({
+						type: "move",
+						direction: "down",
+						curIndex: ui.item.index(),
+						modType: ui.item.data('type'),
+						id: ui.item.data('id')
+					}, '/');
+				} else if (ui.item.index() < dragIndex) {
+					// alert('上')
+					_self.page.postMessage({
+						type: "move",
+						direction: "up",
+						curIndex: ui.item.index(),
+						modType: ui.item.data('type'),
+						id: ui.item.data('id')
+					}, '/');
+				}
+			},
+			sort: function(e, ui) { //控制排序自动滚动视图
+				if (ui.offset.top > $(window).height() - 100) {
+					if (!scroll) {
+						scroll = setInterval(function() {
+							$jpage.scrollTop($jpage.scrollTop() + 10)
+						}, 50)
+					}
+				} else if (ui.offset.top <= 200) {
+					if (!scroll) {
+						scroll = setInterval(function() {
+							$jpage.scrollTop($jpage.scrollTop() - 10)
+						}, 50)
+					}
+				} else {
+					if (scroll) {
+						clearInterval(scroll);
+						scroll = null;
+					}
+				}
 			}
 		});
-		$box.off('click').on('click', '.mod-edit', function() {
-			var $this=$(this).parents('.J_module'),type=$this.data('type');
-			$('body').append($('#modal-'+type).html());
 
-			switch(type){
-				case "text":
-					$("#modal").find('.J_ok').click(function(){
-						// alert($('.J_text').val())
-						window.frames[0].postMessage({
-				       	   type:"text",
-				       	   id:$this.data('id'),
-				       	   data:$('.J_text').val()
-				       	},'/');
+		//操作
+		$box.off('click').on('click', '.btn', function() {
+			var $this = $(this),
+				$mod = $this.parents('.J_module'),
+				type = $mod.data('type'),
+				index = $mod.index();
+			switch ($this.data('type')) {
+				case "up":
+					if (index > 0) {
+						_self.page.postMessage({
+							type: "move",
+							direction: "up",
+							curIndex: index - 1,
+							modType: type,
+							id: $mod.data('id')
+						}, '/');
+						$mod.prev('.J_module').before($mod);
+					}
+					break;
+				case "down":
+					if (index < $mod.siblings('.J_module').length) {
+						_self.page.postMessage({
+							type: "move",
+							direction: "down",
+							curIndex: index + 1,
+							modType: type,
+							id: $mod.data('id')
+						}, '/');
+						$mod.next('.J_module').after($mod);
+					}
+					break;
+				case "edit":
+					$('body').append($('#modal-' + type).html());
+					var $modal = $("#modal");
+					switch (type) {
+						case "text":
+							$modal.find('.J_ok').click(function() {
+								_self.page.postMessage({
+									type: "text",
+									id: $mod.data('id'),
+									data: $('.J_text').val()
+								}, '/');
+								$modal.modal('hide');
+							});
+						break;
+						case "slider":
+							var htm=[],$slideTable=$('.J_SlideTable');
+							$.each(_self.config.modules[$mod.index()].data,function(i,d){
+								htm.push('<tr>\
+									<td>\
+						                <div class="input-group">\
+						                  <input type="text" class="form-control input-sm" placeholder="图片地址" value="'+d.img+'">\
+						                  <span class="input-group-btn">\
+						                    <button class="btn btn-default btn-sm" type="button" title="上传图片"><i class="glyphicon glyphicon-upload"></i></button>\
+						                  </span>\
+						                </div>\
+						              </td>\
+						              <td><input type="text" class="form-control input-sm" placeholder="图片链接" value="'+d.url+'"></td>\
+						              <td align="center">\
+						                <div class="btn-group">\
+						                  <button type="button" class="btn btn-default btn-sm J_ImgUp" title="向上"><i class="glyphicon glyphicon-arrow-up"></i></button>\
+						                  <button type="button" class="btn btn-default btn-sm J_ImgDown" title="向下"><i class="glyphicon glyphicon-arrow-down"></i></button>\
+						                  <button type="button" class="btn btn-default btn-sm J_ImgDel" title="删除"><i class="glyphicon glyphicon-remove"></i></button>\
+						                </div>\
+						              </td>\
+									</tr>')
+							});
+							$slideTable.append(htm.join(''));
+
+							$slideTable.on('click','.J_ImgUp',function(){
+								var $this=$(this),$tr=$this.parents('tr'),index=$tr.index();
+								if(index>1){
+									$slideTable.find('tr').eq(index-1).before($tr);
+								}
+							});
+							$slideTable.on('click','.J_ImgDown',function(){
+								var $this=$(this),$tr=$this.parents('tr'),index=$tr.index();
+								if(index<$tr.siblings('tr').length){
+									$slideTable.find('tr').eq(index+1).after($tr);
+								}
+							});
+							$slideTable.on('click','.J_ImgDel',function(){
+								var par=$(this).parents('tr');
+								if($slideTable.find('tr').length==2){
+									alert('请至少保留一条数据')
+								}else{
+									par.remove();
+								}
+							});
+
+							//添加图片
+							$('.J_SlideAdd').click(function(){
+								$slideTable.append('<tr>\
+									<td>\
+						                <div class="input-group">\
+						                  <input type="text" class="form-control input-sm" placeholder="图片地址">\
+						                  <span class="input-group-btn">\
+						                    <button class="btn btn-default btn-sm" type="button" title="上传图片"><i class="glyphicon glyphicon-upload"></i></button>\
+						                  </span>\
+						                </div>\
+						              </td>\
+						              <td><input type="text" class="form-control input-sm" placeholder="图片链接"></td>\
+						              <td align="center">\
+						                <div class="btn-group">\
+						                  <button type="button" class="btn btn-default btn-sm J_ImgUp" title="向上"><i class="glyphicon glyphicon-arrow-up"></i></button>\
+						                  <button type="button" class="btn btn-default btn-sm J_ImgDown" title="向下"><i class="glyphicon glyphicon-arrow-down"></i></button>\
+						                  <button type="button" class="btn btn-default btn-sm J_ImgDel" title="删除"><i class="glyphicon glyphicon-remove"></i></button>\
+						                </div>\
+						              </td>\
+									</tr>')
+							})
+						break;
+					}
+					$modal.modal('show').on('hide.bs.modal', function() {
+						$(this).remove();
 					});
-				break;
+					break;
+				case "del":
+					if ($('.J_module').length > 1) {
+						_self.page.postMessage({
+							type: "del",
+							modType: type,
+							id: $mod.data('id')
+						}, '/');
+						$mod.remove();
+					} else {
+						alert('至少应该保留一个模块！')
+					}
+					break;
 			}
-
-
-
-
-
-			$('#modal').modal('show').on('hide.bs.modal',function(){
-				$(this).remove();
-			});
-			return false;
 		});
 	},
 	// 添加模块
@@ -127,7 +283,7 @@ Special.prototype = {
 						console.log(ui.draggable.data('modid'))
 						$('.ui-sortable-placeholder').remove();
 					},
-					over: function() {
+					over: function(e,ui) {
 						$('.ui-sortable-placeholder').remove();
 						if (dey) clearTimeout(dey);
 						dey = setTimeout(function() {
@@ -146,7 +302,7 @@ Special.prototype = {
 		});
 	},
 	leftMenu: function() {
-		var _self=this;
+		var _self = this;
 		// 层
 		$('.J_ToolBar').on('click', 'li', function() {
 			var $this = $(this);
@@ -167,44 +323,81 @@ Special.prototype = {
 		});
 
 		//头尾
-		$('#J_page_head,#J_page_footer').change(function(){
-			if($(this).val()==2){
+		$('#J_page_head,#J_page_footer').change(function() {
+			if ($(this).val() == 2) {
 				$(this).next('textarea').show();
-			}else{
+			} else {
 				$(this).next('textarea').hide();
 			}
 		});
 
 		// 页面
-		function bg(){
-		   $(this).parents("table").find(".onselected").removeClass("onselected").end().end().addClass("onselected");
-	       _self.page.postMessage({
-	       	   type:"bg",
-	       	   img:$(".J_PageBgImage").data('bg'),
-	       	   color:$("#colorsample-pickb").val(),
-	       	   show:$(".J_PageShowSelect.onselected").data('bg-show'),
-	       	   fixed:false,
-	       	   align:$(".J_PageAlignSelect.onselected").data('bg-align')
-	       },'/');
+		function bg() {
+			$(this).parents("table").find(".onselected").removeClass("onselected").end().end().addClass("onselected");
+			_self.page.postMessage({
+				type: "bg",
+				img: $(".J_PageBgImage").data('bg'),
+				color: $("#colorsample-pickb").val(),
+				show: $(".J_PageShowSelect.onselected").data('bg-show'),
+				fixed: false,
+				align: $(".J_PageAlignSelect.onselected").data('bg-align')
+			}, '/');
 		}
 
 		// css
-		function css(){
+		function css() {
 			window.frames[0].postMessage({
-	       	   type:"css",
-	       	   data:$('.J_CSSText').val()
-	       	},'/');
+				type: "css",
+				data: $('.J_CSSText').val()
+			}, '/');
 		}
 
-
-
-
-
-
-
-		window.onload=function(){
-			$(".J_PageShowSelect,.J_PageAlignSelect").click(bg);// bg();
+		window.onload = function() {
+			$(".J_PageShowSelect,.J_PageAlignSelect").click(bg); // bg();
 			$('#J_CssSave').click(css);
 		}
 	}
 }
+
+/*
+	待解决
+	1、轮播图模块功能
+	2、案例模块
+	3、解决添加模块拖拽精确位置
+*/
+
+/*
+	20170209
+	1、自定义区编辑
+	2、删除功能
+	3、拖动排序、上下排序------ing
+	4、解决模块拖动 动态滚动窗口
+*/
+
+
+
+
+ // $(e).imgUpload({
+ //        url:'/admin/api/upload/upload.php',
+ //        data:{
+ //            action:'ad'
+ //        },
+ //        before:function(e){
+ //            e.text('上传中...');
+ //        },
+ //        success:function(e,data){//当前对象，返回的完整数据
+ //            if (data.info.code == 100) {
+ //                e.text('选择文件');
+ //                var n=e.data('index'),_url=data.server+data.id;
+ //                $("#cover"+n).val(_url);
+ //                $('.coverPic'+n).attr({src:_url});
+ //            }else {
+ //                alert(data.info.message);
+ //                e.text('选择文件');
+ //            }
+ //        },
+ //        error:function(e){//当前对象
+ //            alert('接口异常！');
+ //            e.text('选择文件');
+ //        }
+ //    });
